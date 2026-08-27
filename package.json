@@ -1,7 +1,6 @@
 {
   "name": "duora",
   "version": "1.0.0",
-  "description": "Duora — приватное приложение для двух человек",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
