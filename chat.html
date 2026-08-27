@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Duora — Чат</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#0c0a13;
+  --panel:#171321;
+  --panel2:#211b30;
+  --text:#fff;
+  --muted:#9992aa;
+  --accent:#9d7cff;
+  --accent2:#d267ff;
+  --line:#ffffff12;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  min-height:100svh;
+  background:
+    radial-gradient(circle at 15% 0%,#694cc044,transparent 30%),
+    radial-gradient(circle at 100% 100%,#bd4fbe2c,transparent 35%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+}
+
+.app{
+  width:100%;
+  max-width:600px;
+  height:100svh;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+/* HEADER */
+
+header{
+  height:75px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  padding:12px 17px;
+  border-bottom:1px solid var(--line);
+  background:#100d18cc;
+  backdrop-filter:blur(18px);
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:14px;
+  color:white;
+  background:#ffffff0c;
+  font-size:20px;
+}
+
+.person{
+  margin-left:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:43px;
+  height:43px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size:20px;
+}
+
+.name{
+  font-weight:bold;
+  font-size:15px;
+}
+
+.online{
+  color:#73e6a2;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.headerButtons{
+  margin-left:auto;
+  display:flex;
+  gap:7px;
+}
+
+.headerButton{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  color:white;
+  background:#ffffff0b;
+  font-size:18px;
+}
+
+/* CHAT */
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 15px 18px;
+  scroll-behavior:smooth;
+}
+
+.welcome{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin:10px auto 25px;
+  max-width:280px;
+}
+
+.welcomeIcon{
+  width:55px;
+  height:55px;
+  margin:0 auto 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:18px;
+  background:#ffffff0b;
+  font-size:25px;
+}
+
+.message{
+  display:flex;
+  margin:8px 0;
+}
+
+.message.me{
+  justify-content:flex-end;
+}
+
+.bubble{
+  max-width:78%;
+  padding:11px 14px;
+  border-radius:18px;
+  background:var(--panel2);
+  color:#eee;
+  font-size:15px;
+  line-height:1.4;
+  word-wrap:break-word;
+}
+
+.me .bubble{
+  background:linear-gradient(135deg,#8062df,#ad61d7);
+  border-bottom-right-radius:6px;
+}
+
+.message:not(.me) .bubble{
+  border-bottom-left-radius:6px;
+}
+
+.time{
+  display:block;
+  margin-top:4px;
+  font-size:9px;
+  opacity:.55;
+  text-align:right;
+}
+
+/* INPUT */
+
+.bottom{
+  flex-shrink:0;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:#100d18ee;
+  border-top:1px solid var(--line);
+  backdrop-filter:blur(20px);
+}
+
+.inputRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.iconButton{
+  flex-shrink:0;
+  width:45px;
+  height:45px;
+  border:0;
+  border-radius:15px;
+  color:white;
+  background:#ffffff0c;
+  font-size:20px;
+}
+
+.input{
+  flex:1;
+  min-width:0;
+  height:45px;
+  border:1px solid var(--line);
+  outline:none;
+  border-radius:16px;
+  padding:0 15px;
+  color:white;
+  background:#ffffff08;
+  font-size:15px;
+}
+
+.input:focus{
+  border-color:#9d7cff77;
+}
+
+.send{
+  width:45px;
+  height:45px;
+  border:0;
+  border-radius:15px;
+  color:white;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size:18px;
+}
+
+/* STICKERS */
+
+.stickerPanel{
+  display:none;
+  margin-bottom:10px;
+  padding:12px;
+  max-height:230px;
+  overflow-y:auto;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#191522f2;
+  backdrop-filter:blur(20px);
+}
+
+.stickerPanel.open{
+  display:block;
+  animation:panel .2s ease;
+}
+
+@keyframes panel{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.stickerGrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+
+.sticker{
+  aspect-ratio:1;
+  border:0;
+  border-radius:15px;
+  background:#ffffff0a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.sticker img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.createSticker{
+  border:1px dashed #ffffff2b;
+  color:#aaa2b8;
+  font-size:25px;
+}
+
+.panelTitle{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  color:#bdb6c9;
+  font-size:12px;
+}
+
+.hidden{
+  display:none;
+}
+
+/* STICKER MESSAGE */
+
+.sentSticker{
+  width:115px;
+  height:115px;
+  object-fit:contain;
+  display:block;
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:40px 10px;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+  <button class="back" onclick="goBack()">
+    ←
+  </button>
+
+  <div class="person">
+
+    <div class="avatar">
+      👤
+    </div>
+
+    <div>
+      <div class="name">
+        Второй человек
+      </div>
+
+      <div class="online">
+        ● онлайн
+      </div>
+    </div>
+
+  </div>
+
+  <div class="headerButtons">
+
+    <button
+      class="headerButton"
+      onclick="voiceChat()">
+      🎙️
+    </button>
+
+  </div>
+
+</header>
+
+
+<div
+  id="messages"
+  class="messages">
+
+  <div class="welcome">
+
+    <div class="welcomeIcon">
+      💜
+    </div>
+
+    Вы подключены.
+    Это ваша приватная комната.
+
+  </div>
+
+</div>
+
+
+<div class="bottom">
+
+  <!-- ПАНЕЛЬ СТИКЕРОВ -->
+
+  <div
+    id="stickerPanel"
+    class="stickerPanel">
+
+    <div class="panelTitle">
+
+      <span>
+        Стикеры
+      </span>
+
+      <span>
+        Ваша коллекция
+      </span>
+
+    </div>
+
+    <div
+      id="stickerGrid"
+      class="stickerGrid">
+
+      <button
+        class="sticker"
+        onclick="sendEmoji('❤️')">
+        ❤️
+      </button>
+
+      <button
+        class="sticker"
+        onclick="sendEmoji('😂')">
+        😂
+      </button>
+
+      <button
+        class="sticker"
+        onclick="sendEmoji('🔥')">
+        🔥
+      </button>
+
+      <button
+        class="sticker"
+        onclick="sendEmoji('🥰')">
+        🥰
+      </button>
+
+      <button
+        class="sticker"
+        onclick="sendEmoji('😭')">
+        😭
+      </button>
+
+      <!-- СОЗДАТЬ СТИКЕР -->
+
+      <button
+        class="sticker createSticker"
+        onclick="createSticker()">
+        +
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="inputRow">
+
+    <button
+      class="iconButton"
+      onclick="toggleStickers()">
+      🔳
+    </button>
+
+    <input
+      id="messageInput"
+      class="input"
+      type="text"
+      maxlength="1000"
+      placeholder="Введите текст..."
+      autocomplete="off">
+
+    <button
+      class="send"
+      onclick="sendMessage()">
+      ➤
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- Скрытый выбор фотографии -->
+
+<input
+  id="stickerFile"
+  class="hidden"
+  type="file"
+  accept="image/*"
+  onchange="handleSticker(event)">
+
+
+<script>
+
+const messages =
+  document.getElementById("messages");
+
+const input =
+  document.getElementById("messageInput");
+
+const stickerPanel =
+  document.getElementById("stickerPanel");
+
+const stickerGrid =
+  document.getElementById("stickerGrid");
+
+
+/* СТИКЕРЫ */
+
+let customStickers =
+  JSON.parse(
+    localStorage.getItem("duora_stickers") || "[]"
+  );
+
+
+function loadStickers(){
+
+  customStickers.forEach(src => {
+
+    const button =
+      document.createElement("button");
+
+    button.className = "sticker";
+
+    const img =
+      document.createElement("img");
+
+    img.src = src;
+
+    button.appendChild(img);
+
+    button.onclick = () =>
+      sendSticker(src);
+
+    stickerGrid.insertBefore(
+      button,
+      stickerGrid.lastElementChild
+    );
+
+  });
+
+}
+
+
+function toggleStickers(){
+
+  stickerPanel.classList.toggle("open");
+
+}
+
+
+function createSticker(){
+
+  document
+    .getElementById("stickerFile")
+    .click();
+
+}
+
+
+function handleSticker(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  if(!file.type.startsWith("image/")){
+    alert("Выберите изображение.");
+    return;
+  }
+
+  /*
+    Сжимаем изображение перед сохранением,
+    чтобы localStorage не переполнялся.
+  */
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(){
+
+    const img =
+      new Image();
+
+    img.onload = function(){
+
+      const canvas =
+        document.createElement("canvas");
+
+      const max = 500;
+
+      let width = img.width;
+      let height = img.height;
+
+      if(width > height){
+
+        if(width > max){
+          height *= max / width;
+          width = max;
+        }
+
+      }else{
+
+        if(height > max){
+          width *= max / height;
+          height = max;
+        }
+
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx =
+        canvas.getContext("2d");
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        width,
+        height
+      );
+
+      const data =
+        canvas.toDataURL(
+          "image/jpeg",
+          .75
+        );
+
+      customStickers.push(data);
+
+      localStorage.setItem(
+        "duora_stickers",
+        JSON.stringify(customStickers)
+      );
+
+      addStickerButton(data);
+
+      sendSticker(data);
+
+    };
+
+    img.src = reader.result;
+
+  };
+
+  reader.readAsDataURL(file);
+
+  event.target.value = "";
+
+}
+
+
+function addStickerButton(src){
+
+  const button =
+    document.createElement("button");
+
+  button.className = "sticker";
+
+  const img =
+    document.createElement("img");
+
+  img.src = src;
+
+  button.appendChild(img);
+
+  button.onclick = () =>
+    sendSticker(src);
+
+  stickerGrid.insertBefore(
+    button,
+    stickerGrid.lastElementChild
+  );
+
+}
+
+
+/* ОТПРАВКА СООБЩЕНИЙ */
+
+function sendMessage(){
+
+  const text =
+    input.value.trim();
+
+  if(!text){
+    return;
+  }
+
+  addTextMessage(text);
+
+  input.value = "";
+
+  stickerPanel.classList.remove("open");
+
+  input.focus();
+
+}
+
+
+function addTextMessage(text){
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "message me";
+
+  const bubble =
+    document.createElement("div");
+
+  bubble.className =
+    "bubble";
+
+  bubble.textContent =
+    text;
+
+  addTime(bubble);
+
+  wrapper.appendChild(bubble);
+
+  messages.appendChild(wrapper);
+
+  scrollBottom();
+
+}
+
+
+function sendEmoji(emoji){
+
+  addTextMessage(emoji);
+
+  stickerPanel.classList.remove("open");
+
+}
+
+
+function sendSticker(src){
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "message me";
+
+  const bubble =
+    document.createElement("div");
+
+  bubble.className =
+    "bubble";
+
+  const img =
+    document.createElement("img");
+
+  img.src = src;
+
+  img.className =
+    "sentSticker";
+
+  bubble.appendChild(img);
+
+  addTime(bubble);
+
+  wrapper.appendChild(bubble);
+
+  messages.appendChild(wrapper);
+
+  stickerPanel.classList.remove("open");
+
+  scrollBottom();
+
+}
+
+
+function addTime(element){
+
+  const time =
+    document.createElement("span");
+
+  time.className = "time";
+
+  time.textContent =
+    new Date().toLocaleTimeString(
+      "ru-RU",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  element.appendChild(time);
+
+}
+
+
+function scrollBottom(){
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+
+/* ENTER */
+
+input.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Enter"){
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* ГОЛОС */
+
+function voiceChat(){
+
+  alert(
+    "🎙️ Голосовой чат появится после подключения настоящей системы проверки возраста и связи."
+  );
+
+}
+
+
+/* НАЗАД */
+
+function goBack(){
+
+  if(
+    confirm(
+      "Вернуться на главный экран?"
+    )
+  ){
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+/* ЗАГРУЗКА */
+
+loadStickers();
+
+</script>
+
+</body>
+</html>
