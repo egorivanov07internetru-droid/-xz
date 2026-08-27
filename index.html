@@ -1,573 +1,693 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duora</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duora</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+*{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: white;
-      background:
-        radial-gradient(circle at 20% 10%, #6546b8 0%, transparent 30%),
-        radial-gradient(circle at 90% 90%, #7d2e9d 0%, transparent 30%),
-        #0d0a16;
-      display: flex;
-      justify-content: center;
-      overflow: hidden;
-    }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at 20% 10%,#7655d955,transparent 30%),
+        radial-gradient(circle at 90% 90%,#d14fd944,transparent 30%),
+        #0b0912;
+}
 
-    .app {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      padding: 25px 20px;
-      display: flex;
-      flex-direction: column;
-    }
+.app{
+    width:100%;
+    max-width:520px;
+    min-height:100vh;
+    margin:auto;
+    padding:24px 20px;
+    display:flex;
+    flex-direction:column;
+}
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 21px;
-      font-weight: bold;
-    }
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:21px;
+    font-weight:800;
+}
 
-    .logo-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #9c7cff, #d267ff);
-      box-shadow: 0 8px 30px #9c7cff55;
-    }
+.logoIcon{
+    width:38px;
+    height:38px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#9c7cff,#d267ff);
+    box-shadow:0 8px 30px #9c7cff55;
+}
 
-    .status {
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      color: #c8c2d6;
-      background: #ffffff0d;
-      border: 1px solid #ffffff12;
-    }
+.status{
+    padding:8px 12px;
+    border-radius:20px;
+    background:#ffffff0c;
+    border:1px solid #ffffff12;
+    color:#bbb4c8;
+    font-size:12px;
+}
 
-    main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-    }
+main{
+    flex:1;
+    display:flex;
+    align-items:center;
+}
 
-    .screen {
-      width: 100%;
-      display: none;
-      animation: appear .3s ease;
-    }
+.screen{
+    display:none;
+    width:100%;
+    animation:appear .3s ease;
+}
 
-    .screen.active {
-      display: block;
-    }
+.screen.active{
+    display:block;
+}
 
-    @keyframes appear {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:translateY(12px);
     }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
 
-    .hero {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+.hero{
+    text-align:center;
+    margin-bottom:30px;
+}
 
-    .icon {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 22px;
-      border-radius: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-      background: linear-gradient(
-        145deg,
-        #9c7cff33,
-        #d267ff18
-      );
-      border: 1px solid #ffffff18;
-      box-shadow: 0 20px 60px #00000055;
-    }
+.bigIcon{
+    width:90px;
+    height:90px;
+    margin:0 auto 22px;
+    border-radius:28px;
+    display:grid;
+    place-items:center;
+    font-size:40px;
+    background:#9c7cff22;
+    border:1px solid #ffffff15;
+    box-shadow:0 20px 60px #00000055;
+}
 
-    h1 {
-      margin: 0;
-      font-size: 38px;
-      line-height: 1.05;
-      letter-spacing: -1.5px;
-    }
+h1{
+    margin:0;
+    font-size:38px;
+    line-height:1.05;
+    letter-spacing:-1.5px;
+}
 
-    .description {
-      color: #aaa3bb;
-      line-height: 1.55;
-      font-size: 15px;
-      max-width: 370px;
-      margin: 13px auto 0;
-    }
+.description{
+    color:#aaa3b8;
+    line-height:1.55;
+    font-size:15px;
+    max-width:370px;
+    margin:13px auto 0;
+}
 
-    .card {
-      padding: 20px;
-      border-radius: 25px;
-      background: #1b1729d9;
-      border: 1px solid #ffffff12;
-      box-shadow: 0 20px 70px #00000055;
-      backdrop-filter: blur(20px);
-    }
+.card{
+    padding:20px;
+    border-radius:25px;
+    background:#1a1628dd;
+    border:1px solid #ffffff12;
+    box-shadow:0 20px 70px #00000055;
+    backdrop-filter:blur(20px);
+}
 
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 17px;
-      padding: 17px;
-      font-size: 16px;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      transition: .18s;
-    }
+button{
+    width:100%;
+    border:0;
+    border-radius:17px;
+    padding:17px;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-    button:active {
-      transform: scale(.97);
-    }
+button:active{
+    transform:scale(.97);
+}
 
-    .primary {
-      background: linear-gradient(135deg, #9c7cff, #d267ff);
-      box-shadow: 0 12px 35px #9c7cff44;
-    }
+.primary{
+    background:linear-gradient(135deg,#9c7cff,#d267ff);
+    box-shadow:0 12px 35px #9c7cff44;
+}
 
-    .secondary {
-      margin-top: 11px;
-      background: #ffffff0d;
-      border: 1px solid #ffffff12;
-    }
+.secondary{
+    margin-top:11px;
+    background:#ffffff0b;
+    border:1px solid #ffffff12;
+}
 
-    button:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
+.back{
+    width:auto;
+    padding:5px 0 20px;
+    background:none;
+    color:#bbb4c9;
+    font-size:14px;
+}
 
-    .hint {
-      text-align: center;
-      color: #777187;
-      font-size: 12px;
-      margin: 16px 0 0;
-    }
+.title{
+    margin:0 0 8px;
+    font-size:28px;
+}
 
-    .back {
-      width: auto;
-      padding: 5px 0 20px;
-      background: none;
-      color: #bbb4c9;
-      font-size: 14px;
-    }
+.text{
+    color:#aaa3bb;
+    line-height:1.5;
+    font-size:14px;
+}
 
-    .title {
-      font-size: 28px;
-      margin: 0 0 8px;
-    }
+.progress{
+    height:9px;
+    margin-top:25px;
+    border-radius:20px;
+    overflow:hidden;
+    background:#ffffff0d;
+}
 
-    .text {
-      color: #aaa3bb;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 25px;
-    }
+.progressBar{
+    width:0%;
+    height:100%;
+    border-radius:20px;
+    background:linear-gradient(90deg,#9c7cff,#d267ff);
+    transition:width .15s linear;
+}
 
-    .progress {
-      height: 9px;
-      border-radius: 20px;
-      overflow: hidden;
-      background: #ffffff0d;
-    }
+.seconds{
+    text-align:center;
+    font-size:40px;
+    font-weight:900;
+    margin-top:15px;
+}
 
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      border-radius: 20px;
-      background: linear-gradient(90deg, #9c7cff, #d267ff);
-      transition: width .15s linear;
-    }
+.secondsLabel{
+    text-align:center;
+    color:#9992aa;
+    font-size:13px;
+}
 
-    .seconds {
-      text-align: center;
-      font-size: 38px;
-      font-weight: bold;
-      margin-top: 15px;
-    }
+.codeBox{
+    margin:20px 0 15px;
+    padding:28px 10px;
+    text-align:center;
+    border-radius:20px;
+    background:#00000022;
+    border:1px dashed #ffffff22;
+}
 
-    .seconds-label {
-      text-align: center;
-      color: #aaa3bb;
-      font-size: 13px;
-    }
+.code{
+    font-family:monospace;
+    font-size:36px;
+    font-weight:900;
+    letter-spacing:5px;
+}
 
-    .code-box {
-      text-align: center;
-      padding: 27px 15px;
-      border-radius: 20px;
-      background: #00000022;
-      border: 1px dashed #ffffff22;
-      margin: 20px 0 15px;
-    }
+.timer{
+    margin-top:10px;
+    color:#aaa3bb;
+    font-size:13px;
+}
 
-    .code {
-      font-family: monospace;
-      font-size: 36px;
-      font-weight: 900;
-      letter-spacing: 5px;
-    }
+.timer strong{
+    color:white;
+}
 
-    .timer {
-      color: #aaa3bb;
-      font-size: 13px;
-      margin-top: 10px;
-    }
+input{
+    width:100%;
+    padding:17px;
+    border-radius:17px;
+    border:1px solid #ffffff15;
+    outline:none;
+    background:#ffffff09;
+    color:white;
+    text-align:center;
+    font-family:monospace;
+    font-size:26px;
+    font-weight:bold;
+    letter-spacing:5px;
+    text-transform:uppercase;
+}
 
-    .timer strong {
-      color: white;
-    }
+input:focus{
+    border-color:#9c7cff;
+    box-shadow:0 0 0 4px #9c7cff18;
+}
 
-    input {
-      width: 100%;
-      padding: 17px;
-      border-radius: 17px;
-      outline: none;
-      border: 1px solid #ffffff15;
-      background: #ffffff0b;
-      color: white;
-      text-align: center;
-      font-family: monospace;
-      font-size: 26px;
-      font-weight: bold;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-    }
+.error{
+    min-height:20px;
+    margin:10px 0;
+    text-align:center;
+    color:#ff7896;
+    font-size:13px;
+}
 
-    input:focus {
-      border-color: #9c7cff;
-      box-shadow: 0 0 0 4px #9c7cff18;
-    }
-
-    .error {
-      min-height: 20px;
-      margin: 10px 0;
-      text-align: center;
-      color: #ff7896;
-      font-size: 13px;
-    }
-
-    footer {
-      text-align: center;
-      color: #6f697d;
-      font-size: 11px;
-      padding-bottom: 5px;
-    }
-  </style>
+footer{
+    text-align:center;
+    color:#6f687c;
+    font-size:11px;
+    padding-bottom:5px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <header>
+<header>
     <div class="logo">
-      <div class="logo-icon">✦</div>
-      Duora
+        <div class="logoIcon">✦</div>
+        Duora
     </div>
 
-    <div class="status">
-      ● Готово
+    <div class="status" id="status">
+        ● Готово
     </div>
-  </header>
+</header>
 
 
-  <main>
+<main>
 
-    <!-- ГЛАВНЫЙ ЭКРАН -->
-    <section id="home" class="screen active">
+<!-- HOME -->
 
-      <div class="hero">
+<section id="home" class="screen active">
 
-        <div class="icon">
-          💜
+    <div class="hero">
+
+        <div class="bigIcon">
+            💜
         </div>
 
         <h1>
-          Вместе,<br>
-          где бы вы ни были
+            Вместе,<br>
+            где бы вы ни были
         </h1>
 
         <p class="description">
-          Создайте приватное соединение
-          для двух телефонов или
-          присоединитесь к уже созданному.
+            Создайте приватное соединение
+            для двух телефонов или
+            присоединитесь по коду.
         </p>
 
-      </div>
+    </div>
 
-
-      <div class="card">
+    <div class="card">
 
         <button
-          class="primary"
-          onclick="startGeneration()">
-          ✨ Сгенерировать код
+            class="primary"
+            onclick="startGeneration()">
+
+            ✨ Сгенерировать код
+
         </button>
 
         <button
-          class="secondary"
-          onclick="openJoin()">
-          🔗 Присоединиться по коду
+            class="secondary"
+            onclick="openJoin()">
+
+            🔗 Присоединиться по коду
+
         </button>
 
-        <p class="hint">
-          Код действует 5 минут после создания.
+        <p class="description">
+            Код действует 5 минут.
         </p>
 
-      </div>
+    </div>
 
-    </section>
+</section>
 
 
-    <!-- ГЕНЕРАЦИЯ -->
-    <section id="generating" class="screen">
+<!-- GENERATING -->
 
-      <button
+<section id="generating" class="screen">
+
+    <button
         class="back"
-        onclick="backHome()">
-        ← Назад
-      </button>
+        onclick="goHome()">
 
-      <div class="card">
+        ← Назад
+
+    </button>
+
+    <div class="card">
 
         <h2 class="title">
-          Создаём ваш код
+            Создаём код
         </h2>
 
         <p class="text">
-          Подготавливаем безопасный код
-          подключения. Это займёт около
-          30 секунд.
+            Генерируем безопасное подключение.
+            Подожди немного...
         </p>
 
         <div class="progress">
-          <div
-            id="progressBar"
-            class="progress-bar">
-          </div>
+
+            <div
+                id="progressBar"
+                class="progressBar">
+            </div>
+
         </div>
 
         <div
-          id="seconds"
-          class="seconds">
-          30
+            id="seconds"
+            class="seconds">
+
+            30
+
         </div>
 
-        <div class="seconds-label">
-          секунд осталось
+        <div class="secondsLabel">
+            секунд осталось
         </div>
 
-      </div>
+    </div>
 
-    </section>
+</section>
 
 
-    <!-- ГОТОВЫЙ КОД -->
-    <section id="codeScreen" class="screen">
+<!-- CODE -->
 
-      <button
+<section id="codeScreen" class="screen">
+
+    <button
         class="back"
-        onclick="backHome()">
-        ← На главный экран
-      </button>
+        onclick="goHome()">
 
-      <div class="card">
+        ← На главный экран
+
+    </button>
+
+    <div class="card">
 
         <h2 class="title">
-          Ваш код готов 🎉
+            Код готов 🎉
         </h2>
 
         <p class="text">
-          Передайте этот код второму
-          человеку.
+            Передай этот код второму человеку.
         </p>
 
-        <div class="code-box">
+        <div class="codeBox">
 
-          <div
-            id="codeValue"
-            class="code">
-            ---
-          </div>
+            <div
+                id="codeValue"
+                class="code">
 
-          <div class="timer">
-            Действует ещё
-            <strong id="timer">
-              05:00
-            </strong>
-          </div>
+                ---
+
+            </div>
+
+            <div class="timer">
+
+                Действует ещё
+
+                <strong id="timer">
+                    05:00
+                </strong>
+
+            </div>
 
         </div>
 
         <button
-          id="copyButton"
-          class="primary"
-          onclick="copyCode()">
-          📋 Скопировать код
+            id="copyButton"
+            class="primary"
+            onclick="copyCode()">
+
+            📋 Скопировать код
+
         </button>
 
         <button
-          class="secondary"
-          onclick="startGeneration()">
-          🔄 Создать новый
+            class="secondary"
+            onclick="startGeneration()">
+
+            🔄 Новый код
+
         </button>
 
-      </div>
+    </div>
 
-    </section>
+</section>
 
 
-    <!-- ПРИСОЕДИНЕНИЕ -->
-    <section id="joinScreen" class="screen">
+<!-- JOIN -->
 
-      <button
+<section id="joinScreen" class="screen">
+
+    <button
         class="back"
-        onclick="backHome()">
-        ← На главный экран
-      </button>
+        onclick="goHome()">
 
-      <div class="card">
+        ← На главный экран
+
+    </button>
+
+    <div class="card">
 
         <h2 class="title">
-          Присоединиться
+            Присоединиться
         </h2>
 
         <p class="text">
-          Введите код, который вам
-          передал второй человек.
+            Введи код, который тебе
+            передал второй человек.
         </p>
 
         <input
-          id="codeInput"
-          maxlength="7"
-          inputmode="text"
-          autocomplete="off"
-          placeholder="XXX-XXX"
-          oninput="formatCode()">
+            id="codeInput"
+            maxlength="7"
+            inputmode="text"
+            autocomplete="off"
+            placeholder="XXX-XXX"
+            oninput="formatCode()">
 
         <div
-          id="error"
-          class="error">
+            id="error"
+            class="error">
         </div>
 
         <button
-          id="connectButton"
-          class="primary"
-          disabled
-          onclick="connect()">
-          🔗 Подключиться
+            id="connectButton"
+            class="primary"
+            disabled
+            onclick="joinRoom()">
+
+            🔗 Подключиться
+
         </button>
 
-      </div>
+    </div>
 
-    </section>
+</section>
 
-  </main>
+</main>
 
 
-  <footer>
-    Приватная комната • Только для двух участников
-  </footer>
+<footer>
+    Приватная комната • Только 2 человека
+</footer>
 
 </div>
 
 
 <script>
 
-  let generationTimer;
-  let expirationTimer;
+let socket = null;
 
-  let currentCode = "";
-  let expirationTime = 0;
+let generationTimer = null;
 
+let expirationTimer = null;
 
-  const alphabet =
-    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+let currentCode = "";
 
-
-  function showScreen(id) {
-
-    document
-      .querySelectorAll(".screen")
-      .forEach(screen => {
-
-        screen.classList.remove("active");
-
-      });
-
-    document
-      .getElementById(id)
-      .classList.add("active");
-  }
+let expirationTime = 0;
 
 
-  function generatePart() {
+/*
+========================================
+WEBSOCKET
+========================================
+*/
 
-    let result = "";
+function connectSocket(){
 
-    for (let i = 0; i < 3; i++) {
+    if(
+        socket &&
+        socket.readyState === WebSocket.OPEN
+    ){
+        return Promise.resolve();
+    }
 
-      result += alphabet[
-        Math.floor(
-          Math.random() * alphabet.length
-        )
-      ];
+
+    return new Promise((resolve,reject)=>{
+
+        /*
+        Если сайт открыт через HTTPS,
+        автоматически используем WSS.
+        */
+
+        const protocol =
+            location.protocol === "https:"
+            ? "wss:"
+            : "ws:";
+
+
+        /*
+        Если сервер находится
+        на том же домене.
+        */
+
+        const url =
+            protocol +
+            "//" +
+            location.host;
+
+
+        socket = new WebSocket(url);
+
+
+        socket.onopen = () => {
+
+            setStatus("● Сервер подключён");
+
+            resolve();
+
+        };
+
+
+        socket.onerror = () => {
+
+            setStatus("● Нет соединения");
+
+            reject(
+                new Error("WebSocket error")
+            );
+
+        };
+
+
+        socket.onclose = () => {
+
+            setStatus("● Соединение потеряно");
+
+        };
+
+
+        socket.onmessage = event => {
+
+            handleServerMessage(
+                JSON.parse(event.data)
+            );
+
+        };
+
+    });
+
+}
+
+
+/*
+========================================
+SERVER EVENTS
+========================================
+*/
+
+function handleServerMessage(data){
+
+    if(data.type === "room_created"){
+
+        currentCode = data.code;
+
+        expirationTime =
+            data.expiresAt;
+
+        document
+            .getElementById("codeValue")
+            .textContent =
+            currentCode;
+
+        startExpiration();
+
+        showScreen("codeScreen");
+
+        return;
+    }
+
+
+    if(data.type === "connected"){
+
+        /*
+        Оба телефона получили
+        сигнал подключения.
+
+        Переходим в chat.html.
+        */
+
+        window.location.href =
+            "chat.html?room=" +
+            encodeURIComponent(currentCode);
+
+        return;
+    }
+
+
+    if(data.type === "join_error"){
+
+        document
+            .getElementById("error")
+            .textContent =
+            data.message;
+
+        document
+            .getElementById("connectButton")
+            .disabled = false;
+
+        return;
+    }
+
+
+    if(data.type === "room_expired"){
+
+        alert(
+            "Срок действия комнаты истёк."
+        );
+
+        goHome();
 
     }
 
-    return result;
-  }
+}
 
 
-  function generateCode() {
+/*
+========================================
+GENERATE
+========================================
+*/
 
-    return (
-      generatePart() +
-      "-" +
-      generatePart()
-    );
-
-  }
-
-
-  function startGeneration() {
+function startGeneration(){
 
     clearInterval(generationTimer);
 
@@ -576,203 +696,193 @@
     let seconds = 30;
 
     document
-      .getElementById("seconds")
-      .textContent = seconds;
+        .getElementById("seconds")
+        .textContent =
+        seconds;
 
     document
-      .getElementById("progressBar")
-      .style.width = "0%";
-
-
-    generationTimer = setInterval(() => {
-
-      seconds--;
-
-      document
-        .getElementById("seconds")
-        .textContent = seconds;
-
-
-      const progress =
-        ((30 - seconds) / 30) * 100;
-
-      document
         .getElementById("progressBar")
         .style.width =
-        progress + "%";
+        "0%";
 
 
-      if (seconds <= 0) {
+    generationTimer =
+        setInterval(async()=>{
 
-        clearInterval(generationTimer);
+            seconds--;
 
-        createCode();
-
-      }
-
-    }, 1000);
-
-  }
+            document
+                .getElementById("seconds")
+                .textContent =
+                seconds;
 
 
-  function createCode() {
-
-    currentCode = generateCode();
-
-    expirationTime =
-      Date.now() + 5 * 60 * 1000;
-
-
-    document
-      .getElementById("codeValue")
-      .textContent = currentCode;
+            document
+                .getElementById("progressBar")
+                .style.width =
+                ((30 - seconds) / 30 * 100) +
+                "%";
 
 
-    document
-      .getElementById("copyButton")
-      .disabled = false;
+            if(seconds <= 0){
+
+                clearInterval(
+                    generationTimer
+                );
+
+                try{
+
+                    await connectSocket();
+
+                    socket.send(
+                        JSON.stringify({
+                            type:
+                            "create_room"
+                        })
+                    );
+
+                }catch{
+
+                    alert(
+                        "Не удалось подключиться к серверу."
+                    );
+
+                    goHome();
+
+                }
+
+            }
+
+        },1000);
+
+}
 
 
-    showScreen("codeScreen");
+/*
+========================================
+JOIN
+========================================
+*/
 
-
-    clearInterval(expirationTimer);
-
-    expirationTimer =
-      setInterval(updateExpiration, 1000);
-
-    updateExpiration();
-
-  }
-
-
-  function updateExpiration() {
-
-    const remaining =
-      Math.max(
-        0,
-        expirationTime - Date.now()
-      );
-
-
-    const totalSeconds =
-      Math.ceil(remaining / 1000);
-
-
-    const minutes =
-      Math.floor(totalSeconds / 60);
-
-    const seconds =
-      totalSeconds % 60;
-
+function openJoin(){
 
     document
-      .getElementById("timer")
-      .textContent =
-      String(minutes).padStart(2, "0") +
-      ":" +
-      String(seconds).padStart(2, "0");
+        .getElementById("codeInput")
+        .value = "";
 
+    document
+        .getElementById("error")
+        .textContent = "";
 
-    if (remaining <= 0) {
-
-      clearInterval(expirationTimer);
-
-      document
-        .getElementById("timer")
-        .textContent = "00:00";
-
-      document
-        .getElementById("copyButton")
+    document
+        .getElementById("connectButton")
         .disabled = true;
-
-    }
-
-  }
-
-
-  function copyCode() {
-
-    if (
-      !currentCode ||
-      Date.now() >= expirationTime
-    ) {
-      return;
-    }
-
-
-    navigator.clipboard
-      .writeText(currentCode)
-      .then(() => {
-
-        const button =
-          document.getElementById(
-            "copyButton"
-          );
-
-        button.textContent =
-          "✓ Код скопирован";
-
-        setTimeout(() => {
-
-          button.textContent =
-            "📋 Скопировать код";
-
-        }, 1500);
-
-      });
-
-  }
-
-
-  function openJoin() {
-
-    document
-      .getElementById("codeInput")
-      .value = "";
-
-    document
-      .getElementById("connectButton")
-      .disabled = true;
-
-    document
-      .getElementById("error")
-      .textContent = "";
 
     showScreen("joinScreen");
 
-    setTimeout(() => {
+    setTimeout(()=>{
 
-      document
-        .getElementById("codeInput")
-        .focus();
+        document
+            .getElementById("codeInput")
+            .focus();
 
-    }, 200);
+    },200);
 
-  }
+}
 
 
-  function formatCode() {
+async function joinRoom(){
+
+    const code =
+        document
+            .getElementById("codeInput")
+            .value;
+
+
+    if(
+        !/^[A-Z0-9]{3}-[A-Z0-9]{3}$/
+            .test(code)
+    ){
+
+        return;
+
+    }
+
+
+    const button =
+        document
+            .getElementById(
+                "connectButton"
+            );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "⏳ Подключаемся...";
+
+
+    try{
+
+        await connectSocket();
+
+        socket.send(
+            JSON.stringify({
+                type:
+                "join_room",
+                code
+            })
+        );
+
+
+    }catch{
+
+        document
+            .getElementById("error")
+            .textContent =
+            "Не удалось подключиться к серверу.";
+
+        button.disabled = false;
+
+        button.textContent =
+            "🔗 Подключиться";
+
+    }
+
+}
+
+
+/*
+========================================
+CODE INPUT
+========================================
+*/
+
+function formatCode(){
 
     const input =
-      document.getElementById(
-        "codeInput"
-      );
+        document
+            .getElementById(
+                "codeInput"
+            );
 
 
     let value =
-      input.value
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, "")
-        .slice(0, 6);
+        input.value
+            .toUpperCase()
+            .replace(
+                /[^A-Z0-9]/g,
+                ""
+            )
+            .slice(0,6);
 
 
-    if (value.length > 3) {
+    if(value.length > 3){
 
-      value =
-        value.slice(0, 3) +
-        "-" +
-        value.slice(3);
+        value =
+            value.slice(0,3) +
+            "-" +
+            value.slice(3);
 
     }
 
@@ -781,61 +891,170 @@
 
 
     document
-      .getElementById("connectButton")
-      .disabled =
-      !/^[A-Z0-9]{3}-[A-Z0-9]{3}$/
-        .test(value);
+        .getElementById(
+            "connectButton"
+        )
+        .disabled =
+        !/^[A-Z0-9]{3}-[A-Z0-9]{3}$/
+            .test(value);
 
-  }
-
-
-  function connect() {
-
-    const code =
-      document
-        .getElementById("codeInput")
-        .value;
+}
 
 
-    if (
-      !/^[A-Z0-9]{3}-[A-Z0-9]{3}$/
-        .test(code)
-    ) {
+/*
+========================================
+EXPIRATION
+========================================
+*/
 
-      return;
+function startExpiration(){
 
+    clearInterval(
+        expirationTimer
+    );
+
+    expirationTimer =
+        setInterval(()=>{
+
+            const left =
+                Math.max(
+                    0,
+                    expirationTime -
+                    Date.now()
+                );
+
+
+            const total =
+                Math.ceil(
+                    left / 1000
+                );
+
+
+            const minutes =
+                Math.floor(
+                    total / 60
+                );
+
+
+            const seconds =
+                total % 60;
+
+
+            document
+                .getElementById("timer")
+                .textContent =
+                String(minutes)
+                    .padStart(2,"0") +
+                ":" +
+                String(seconds)
+                    .padStart(2,"0");
+
+
+            if(left <= 0){
+
+                clearInterval(
+                    expirationTimer
+                );
+
+                document
+                    .getElementById(
+                        "copyButton"
+                    )
+                    .disabled =
+                    true;
+
+            }
+
+        },1000);
+
+}
+
+
+/*
+========================================
+COPY
+========================================
+*/
+
+function copyCode(){
+
+    if(!currentCode){
+        return;
     }
 
 
-    /*
-      Здесь позже будет настоящее
-      подключение к серверу.
+    navigator.clipboard
+        .writeText(currentCode)
+        .then(()=>{
 
-      После успешного соединения:
-      window.location.href = "chat.html";
-    */
+            const button =
+                document
+                    .getElementById(
+                        "copyButton"
+                    );
+
+            button.textContent =
+                "✓ Код скопирован";
+
+            setTimeout(()=>{
+
+                button.textContent =
+                    "📋 Скопировать код";
+
+            },1500);
+
+        });
+
+}
+
+
+/*
+========================================
+UI
+========================================
+*/
+
+function showScreen(id){
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen =>
+            screen.classList.remove(
+                "active"
+            )
+        );
 
 
     document
-      .getElementById("error")
-      .style.color = "#9c7cff";
+        .getElementById(id)
+        .classList.add("active");
+
+}
+
+
+function setStatus(text){
 
     document
-      .getElementById("error")
-      .textContent =
-      "Код принят. Подключение будет добавлено следующим этапом.";
+        .getElementById("status")
+        .textContent =
+        text;
 
-  }
+}
 
 
-  function backHome() {
+function goHome(){
 
-    clearInterval(generationTimer);
-    clearInterval(expirationTimer);
+    clearInterval(
+        generationTimer
+    );
+
+    clearInterval(
+        expirationTimer
+    );
 
     showScreen("home");
 
-  }
+}
 
 </script>
 
